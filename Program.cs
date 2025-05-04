@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using UserRoles.Data;
 using UserRoles.Models;
 using UserRoles.Services;
+using static Microsoft.AspNetCore.Http.StatusCodes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,21 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options=>
 options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddHsts(options =>
+{
+    options.Preload = true;
+    options.IncludeSubDomains = true;
+    options.MaxAge = TimeSpan.FromDays(60);
+    options.ExcludedHosts.Add("example.com");
+    options.ExcludedHosts.Add("www.example.com");
+});
+
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.RedirectStatusCode = Status307TemporaryRedirect;
+    options.HttpsPort = 5001;
+});
 
 builder.Services.AddIdentity<Users, IdentityRole>(options =>
 {

@@ -1,8 +1,33 @@
-﻿@{
+﻿@model List<TransparencyCo.Models.Product>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-5">
+    <h1 class="text-center mb-4">Our Products</h1>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+        @foreach (var product in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    @if (!string.IsNullOrEmpty(product.ImagePath))
+                    {
+                        <img src="@product.ImagePath" class="card-img-top" alt="Product Image" style="height: 200px; object-fit: cover;">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Description</p>
+                        <hr />
+                        <p class="mb-1"><strong>Certificate:</strong> @product.CertificateName</p>
+                        @if (!string.IsNullOrEmpty(product.CertificateImagePath))
+                        {
+                            <img src="@product.CertificateImagePath" class="img-fluid rounded border" alt="Certificate Image" style="max-height: 150px; object-fit: contain;" />
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
 </div>

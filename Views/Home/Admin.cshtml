@@ -1,7 +1,103 @@
-﻿@{
-    ViewData["Title"] = "Admin Page";
-}
+﻿@model List<TransparencyCo.Models.Product>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Admin page</h1>
+@{
+    ViewData["Title"] = "Admin";
+}
+<h2>Admin Page</h2>
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Add Product</button>
+
+<table class="table mt-3">
+    <thead>
+        <tr><th>Name</th><th>Description</th><th>Certificate</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.CertificateName</td>
+                <td>
+                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal-@item.Id">Edit</button>
+                    <form asp-action="Delete" asp-controller="Product" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModal-@item.Id" tabindex="-1">
+                <div class="modal-dialog">
+                    <form asp-action="Edit" method="post">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Product</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="Id" value="@item.Id" />
+                                <div class="mb-3">
+                                    <label>Name</label>
+                                    <input class="form-control" name="Name" value="@item.Name" />
+                                </div>
+                                <div class="mb-3">
+                                    <label>Description</label>
+                                    <textarea class="form-control" name="Description">@item.Description</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Certificate Name</label>
+                                    <input class="form-control" name="CertificateName" value="@item.CertificateName" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+    </tbody>
+</table>
+
+<!-- Create Modal -->
+<div class="modal fade" id="createModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form asp-controller="Product" asp-action="Create" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Name</label>
+                        <input class="form-control" name="Name" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>Description</label>
+                        <textarea class="form-control" name="Description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>Product Image</label>
+                        <input type="file" class="form-control" name="image" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Certificate Name</label>
+                        <input class="form-control" name="CertificateName" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Certificate Image</label>
+                        <input type="file" class="form-control" name="certificateImage" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Add</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
